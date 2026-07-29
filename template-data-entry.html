@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模板数据录入 - DataStorm 数据工业操作系统</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --hc-primary: #4B7EFE;
+      --hc-primary-hover: #4371E4;
+      --hc-primary-light: #f0f3fe;
+      --hc-page-bg: #f0f0f0;
+      --hc-sidebar-bg: #FFFFFF;
+      --hc-title: #303133;
+      --hc-desc: #909399;
+      --hc-text: #606266;
+      --hc-border: #e4e7ed;
+      --hc-table-header-bg: #f8f8f9;
+      --hc-table-row-hover: #f0f3fe;
+      --hc-table-border: #e4e7ed;
+      --hc-input-border: #DDDEE2;
+      --hc-input-placeholder: #C5C8CE;
+      --hc-text-main: #515A6E;
+      --hc-text-secondary: #576374;
+      --hc-text-muted: #838A95;
+      --hc-danger: #F3605F;
+      --hc-success: #48BD6D;
+      --hc-warning: #F9A110;
+      --hc-topbar-bg: #FFFFFF;
+      --hc-topbar-height: 56px;
+      --hc-sidebar-width: 220px;
+      --hc-sidebar-dark: #252C48;
+      --hc-sidebar-dark-hover: #1d2037;
+      --hc-sidebar-dark-active: #393e64;
+      --hc-font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+      --hc-shadow-card: 0 2px 12px 0 rgba(0,0,0,0.05);
+      --hc-shadow-dropdown: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--hc-font-family);
+      font-size: 13px;
+      color: var(--hc-text-main);
+      background: var(--hc-page-bg);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==================== 顶部导航栏 ==================== */
+    .top-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--hc-topbar-height);
+      background: var(--hc-topbar-bg);
+      border-bottom: 1px solid var(--hc-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0 0 16px;
+      z-index: 100;
+    }
+
+    .top-navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-right: 20px;
+      border-right: 1px solid var(--hc-border);
+      height: var(--hc-topbar-height);
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--hc-primary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .logo-text .brand {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--hc-title);
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text .slogan {
+      font-size: 11px;
+      color: var(--hc-desc);
+    }
+
+    .top-nav-menu {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      margin-left: 4px;
+    }
+
+    .top-nav-menu li {
+      position: relative;
+    }
+
+    .top-nav-menu a {
+      display: block;
+      padding: 0 16px;
+      height: var(--hc-topbar-height);
+      line-height: var(--hc-topbar-height);
+      color: var(--hc-text-main);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .top-nav-menu a:hover {
+      color: var(--hc-primary);
+    }
+
+    .top-nav-menu a.active {
+      color: var(--hc-primary);
+      border-bottom-color: var(--hc-primary);
+      font-weight: 500;
+    }
+
+    .top-navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-right: 16px;
+    }
+
+    .topbar-icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--hc-text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      font-size: 16px;
+    }
+
+    .topbar-icon-btn:hover {
+      background: var(--hc-primary-light);
+      color: var(--hc-primary);
+    }
+
+    .topbar-icon-btn .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 8px;
+      height: 8px;
+      background: var(--hc-danger);
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-left: 4px;
+    }
+
+    .topbar-user:hover {
+      background: var(--hc-primary-light);
+    }
+
+    .topbar-user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--hc-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .topbar-user-name {
+      font-size: 13px;
+      color: var(--hc-text-main);
+    }
+
+    .topbar-env-tag {
+      padding: 2px 10px;
+      border: 1px solid var(--hc-border);
+      border-radius: 3px;
+      font-size: 12px;
+      color: var(--hc-text-muted);
+      margin-left: 4px;
+      cursor: pointer;
+    }
+
+    /* ==================== 左侧侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: var(--hc-topbar-height);
+      left: 0;
+      width: var(--hc-sidebar-width);
+      bottom: 0;
+      background: var(--hc-sidebar-bg);
+      border-right: 1px solid var(--hc-border);
+      overflow-y: auto;
+      z-index: 99;
+      padding: 8px 0;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 2px;
+    }
+
+    .sidebar:hover::-webkit-scrollbar-thumb {
+      background: #c0c4cc;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 40px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--hc-text-main);
+      font-size: 13px;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      background: var(--hc-primary-light);
+      color: var(--hc-primary);
+    }
+
+    .nav-item.active {
+      background: var(--hc-primary-light);
+      color: var(--hc-primary);
+      font-weight: 500;
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--hc-primary);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .nav-item i.nav-icon {
+      width: 20px;
+      text-align: center;
+      margin-right: 10px;
+      font-size: 14px;
+      color: inherit;
+    }
+
+    .nav-item .nav-text {
+      flex: 1;
+    }
+
+    .nav-item .nav-arrow {
+      font-size: 11px;
+      color: var(--hc-desc);
+      transition: transform 0.2s;
+    }
+
+    .nav-item:hover .nav-arrow,
+    .nav-item.active .nav-arrow {
+      color: var(--hc-primary);
+    }
+
+    .nav-item.open .nav-arrow {
+      transform: rotate(90deg);
+    }
+
+    .nav-sub {
+      display: none;
+    }
+
+    .nav-sub.open {
+      display: block;
+    }
+
+    .nav-sub .nav-item {
+      padding-left: 46px;
+      height: 36px;
+    }
+
+    .nav-sub .nav-item.active::before {
+      display: none;
+    }
+
+    /* ==================== 主内容区 ==================== */
+    .main-content {
+      margin-left: var(--hc-sidebar-width);
+      margin-top: var(--hc-topbar-height);
+      min-height: calc(100vh - var(--hc-topbar-height));
+      padding: 16px 20px 40px;
+    }
+
+    /* ==================== 面包屑 ==================== */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .breadcrumb a {
+      color: var(--hc-text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--hc-primary);
+    }
+
+    .breadcrumb .current {
+      color: var(--hc-text-main);
+      font-weight: 500;
+    }
+
+    .breadcrumb-sep {
+      color: var(--hc-desc);
+      font-size: 11px;
+    }
+
+    /* ==================== 卡片容器 ==================== */
+    .card {
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: var(--hc-shadow-card);
+      border: 1px solid var(--hc-border);
+    }
+
+    /* ==================== 查询区域 ==================== */
+    .search-area {
+      padding: 20px 24px 16px;
+      margin-bottom: 16px;
+    }
+
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .search-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .search-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-field .field-label {
+      font-size: 13px;
+      color: var(--hc-text-main);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .hc-input {
+      height: 32px;
+      border: 1px solid var(--hc-input-border);
+      border-radius: 3px;
+      padding: 0 12px;
+      font-size: 13px;
+      color: var(--hc-text-main);
+      outline: none;
+      transition: all 0.2s;
+      font-family: inherit;
+      min-width: 140px;
+    }
+
+    .hc-input::placeholder {
+      color: var(--hc-input-placeholder);
+    }
+
+    .hc-input:hover {
+      border-color: #c0c4cc;
+    }
+
+    .hc-input:focus {
+      border-color: var(--hc-primary);
+      box-shadow: 0 0 0 2px rgba(75, 126, 254, 0.15);
+    }
+
+    .hc-select {
+      height: 32px;
+      border: 1px solid var(--hc-input-border);
+      border-radius: 3px;
+      padding: 0 28px 0 12px;
+      font-size: 13px;
+      color: var(--hc-text-main);
+      outline: none;
+      transition: all 0.2s;
+      font-family: inherit;
+      appearance: none;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23838A95' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") no-repeat right 10px center;
+      cursor: pointer;
+      min-width: 140px;
+    }
+
+    .hc-select:hover {
+      border-color: #c0c4cc;
+    }
+
+    .hc-select:focus {
+      border-color: var(--hc-primary);
+      box-shadow: 0 0 0 2px rgba(75, 126, 254, 0.15);
+    }
+
+    .search-field.keyword-field .hc-input {
+      width: 200px;
+    }
+
+    /* 表单周期单选 */
+    .radio-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .radio-group-label {
+      font-size: 13px;
+      color: var(--hc-text-main);
+      font-weight: 500;
+      margin-right: 4px;
+    }
+
+    .radio-item {
+      padding: 4px 14px;
+      border-radius: 3px;
+      font-size: 13px;
+      color: var(--hc-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+    }
+
+    .radio-item:hover {
+      color: var(--hc-primary);
+      background: var(--hc-primary-light);
+    }
+
+    .radio-item.active {
+      background: var(--hc-primary);
+      color: #fff;
+    }
+
+    /* 日期选择器 */
+    .date-range {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .date-input {
+      height: 32px;
+      border: 1px solid var(--hc-input-border);
+      border-radius: 3px;
+      padding: 0 10px 0 32px;
+      font-size: 13px;
+      color: var(--hc-text-main);
+      outline: none;
+      transition: all 0.2s;
+      font-family: inherit;
+      width: 140px;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%23838A95' d='M11.2 1.8h-.7V.7c0-.4-.3-.7-.7-.7s-.7.3-.7.7v1.1H5.6V.7c0-.4-.3-.7-.7-.7s-.7.3-.7.7v1.1H3.5C2.5 1.8 1.6 2.6 1.6 3.6v7.7c0 1.1.9 1.9 1.9 1.9h7.7c1.1 0 1.9-.9 1.9-1.9V3.6c0-1-.9-1.8-1.9-1.8zm.5 9.5c0 .3-.2.5-.5.5H3.5c-.3 0-.5-.2-.5-.5V5.8h8.7v5.5z'/%3E%3C/svg%3E") no-repeat 10px center;
+    }
+
+    .date-input:hover {
+      border-color: #c0c4cc;
+    }
+
+    .date-input:focus {
+      border-color: var(--hc-primary);
+      box-shadow: 0 0 0 2px rgba(75, 126, 254, 0.15);
+    }
+
+    .date-sep {
+      color: var(--hc-desc);
+    }
+
+    /* 高级搜索 */
+    .advanced-search-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--hc-text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: color 0.2s;
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+
+    .advanced-search-toggle:hover {
+      color: var(--hc-primary);
+    }
+
+    .advanced-search-toggle i {
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+
+    /* 按钮 */
+    .btn {
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--hc-primary);
+      color: #fff;
+      border-color: var(--hc-primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--hc-primary-hover);
+      border-color: var(--hc-primary-hover);
+    }
+
+    .btn-default {
+      background: #fff;
+      color: var(--hc-text-main);
+      border-color: var(--hc-input-border);
+    }
+
+    .btn-default:hover {
+      color: var(--hc-primary);
+      border-color: var(--hc-primary);
+      background: var(--hc-primary-light);
+    }
+
+    .search-actions {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    /* ==================== 操作按钮行 ==================== */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 24px 12px;
+    }
+
+    .btn-add {
+      background: #fff;
+      color: var(--hc-text-main);
+      border-color: var(--hc-input-border);
+    }
+
+    .btn-add:hover {
+      color: var(--hc-primary);
+      border-color: var(--hc-primary);
+    }
+
+    .btn-publish {
+      background: var(--hc-primary);
+      color: #fff;
+      border-color: var(--hc-primary);
+    }
+
+    .btn-publish:hover {
+      background: var(--hc-primary-hover);
+      border-color: var(--hc-primary-hover);
+    }
+
+    /* ==================== 数据表格 ==================== */
+    .table-container {
+      padding: 0 24px 16px;
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .data-table thead th {
+      background: var(--hc-table-header-bg);
+      height: 40px;
+      padding: 0 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--hc-text-main);
+      border-bottom: 1px solid var(--hc-table-border);
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .data-table thead th:first-child {
+      padding-left: 24px;
+      width: 40px;
+    }
+
+    .data-table thead th:last-child {
+      padding-right: 24px;
+      text-align: center;
+    }
+
+    .data-table tbody td {
+      height: 48px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--hc-table-border);
+      color: var(--hc-text-main);
+      white-space: nowrap;
+    }
+
+    .data-table tbody td:first-child {
+      padding-left: 24px;
+    }
+
+    .data-table tbody td:last-child {
+      padding-right: 24px;
+      text-align: center;
+    }
+
+    .data-table tbody tr:hover {
+      background: var(--hc-table-row-hover);
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* 复选框 */
+    .hc-checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #D8D8D8;
+      border-radius: 2px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      position: relative;
+      transition: all 0.2s;
+      vertical-align: middle;
+    }
+
+    .hc-checkbox:checked {
+      background: var(--hc-primary);
+      border-color: var(--hc-primary);
+    }
+
+    .hc-checkbox:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 5px;
+      height: 9px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* 操作列链接 */
+    .action-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .action-link {
+      color: var(--hc-primary);
+      text-decoration: none;
+      font-size: 13px;
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+    }
+
+    .action-link:hover {
+      color: var(--hc-primary-hover);
+      text-decoration: underline;
+    }
+
+    .action-link.danger {
+      color: var(--hc-danger);
+    }
+
+    .action-link.danger:hover {
+      color: #d93a3a;
+    }
+
+    /* 时间显示 */
+    .time-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .time-cell .time {
+      font-size: 13px;
+      color: var(--hc-text-main);
+    }
+
+    .time-cell .date {
+      font-size: 12px;
+      color: var(--hc-text-muted);
+    }
+
+    /* ==================== 分页器 ==================== */
+    .pagination-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 12px 24px 20px;
+      gap: 12px;
+      border-top: 1px solid var(--hc-border);
+      margin: 0 24px;
+    }
+
+    .pagination-info {
+      font-size: 13px;
+      color: var(--hc-text-muted);
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .page-btn {
+      min-width: 28px;
+      height: 28px;
+      padding: 0 8px;
+      border: 1px solid var(--hc-input-border);
+      border-radius: 3px;
+      background: #fff;
+      color: var(--hc-text-main);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+    }
+
+    .page-btn:hover {
+      border-color: var(--hc-primary);
+      color: var(--hc-primary);
+    }
+
+    .page-btn.active {
+      background: var(--hc-primary);
+      border-color: var(--hc-primary);
+      color: #fff;
+    }
+
+    .page-btn:disabled {
+      color: var(--hc-input-placeholder);
+      cursor: not-allowed;
+      border-color: var(--hc-border);
+    }
+
+    .page-btn:disabled:hover {
+      border-color: var(--hc-border);
+      color: var(--hc-input-placeholder);
+    }
+
+    .page-ellipsis {
+      color: var(--hc-desc);
+      padding: 0 4px;
+    }
+
+    .page-jump {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--hc-text-muted);
+    }
+
+    .page-jump input {
+      width: 44px;
+      height: 28px;
+      border: 1px solid var(--hc-input-border);
+      border-radius: 3px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--hc-text-main);
+      outline: none;
+      font-family: inherit;
+    }
+
+    .page-jump input:focus {
+      border-color: var(--hc-primary);
+      box-shadow: 0 0 0 2px rgba(75, 126, 254, 0.15);
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1366px) {
+      :root {
+        --hc-sidebar-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <nav class="top-navbar">
+    <div class="top-navbar-left">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <i class="fas fa-cube"></i>
+        </div>
+        <div class="logo-text">
+          <span class="brand">DataStorm</span>
+          <span class="slogan">数据工业操作系统</span>
+        </div>
+      </div>
+      <ul class="top-nav-menu">
+        <li><a href="#"><i class="fas fa-bars" style="margin-right:4px;"></i></a></li>
+        <li><a href="#" class="active">总览</a></li>
+        <li><a href="#">生产看板</a></li>
+        <li><a href="#">设备看板</a></li>
+        <li><a href="#">能源管理</a></li>
+        <li><a href="#">能耗看板</a></li>
+        <li><a href="#">工作看板</a></li>
+        <li><a href="#">节能降耗专题</a></li>
+        <li><a href="#">设备主题</a></li>
+        <li><a href="#"><i class="fas fa-ellipsis-h"></i></a></li>
+      </ul>
+    </div>
+    <div class="top-navbar-right">
+      <div class="topbar-icon-btn" title="收藏">
+        <i class="far fa-star"></i>
+      </div>
+      <div class="topbar-icon-btn" title="日程">
+        <i class="far fa-calendar"></i>
+      </div>
+      <div class="topbar-icon-btn" title="通知">
+        <i class="far fa-bell"></i>
+        <span class="badge"></span>
+      </div>
+      <div class="topbar-user">
+        <div class="topbar-user-avatar">吴</div>
+        <span class="topbar-user-name">小吴AI</span>
+        <i class="fas fa-chevron-down" style="font-size:10px;color:#838A95;"></i>
+      </div>
+      <div class="topbar-env-tag">正式</div>
+    </div>
+  </nav>
+
+  <!-- 左侧侧边栏 -->
+  <aside class="sidebar">
+    <div class="nav-item">
+      <i class="fas fa-eye nav-icon"></i>
+      <span class="nav-text">生产监管</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-vial nav-icon"></i>
+      <span class="nav-text">工艺仿真</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-bolt nav-icon"></i>
+      <span class="nav-text">能源管理</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-chart-line nav-icon"></i>
+      <span class="nav-text">智能分析</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item active open">
+      <i class="fas fa-file-alt nav-icon"></i>
+      <span class="nav-text">生产报表</span>
+      <i class="fas fa-chevron-right nav-arrow" style="transform:rotate(90deg);"></i>
+    </div>
+    <div class="nav-sub open">
+      <div class="nav-item">报表填报</div>
+      <div class="nav-item">报表审批</div>
+      <div class="nav-item">报表发布</div>
+      <div class="nav-item">生产抄表</div>
+      <div class="nav-item active">模板数据录入</div>
+      <div class="nav-item">抄表数据查询</div>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-cogs nav-icon"></i>
+      <span class="nav-text">运营与决策</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-tools nav-icon"></i>
+      <span class="nav-text">设备运维</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-book nav-icon"></i>
+      <span class="nav-text">知识管理</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-tasks nav-icon"></i>
+      <span class="nav-text">事务管理</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-th-large nav-icon"></i>
+      <span class="nav-text">基础管理</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+    <div class="nav-item">
+      <i class="fas fa-cog nav-icon"></i>
+      <span class="nav-text">系统管理</span>
+      <i class="fas fa-chevron-right nav-arrow"></i>
+    </div>
+  </aside>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+    <!-- 面包屑 -->
+    <nav class="breadcrumb">
+      <a href="#">首页</a>
+      <span class="breadcrumb-sep"><i class="fas fa-chevron-right"></i></span>
+      <a href="#">生产报表</a>
+      <span class="breadcrumb-sep"><i class="fas fa-chevron-right"></i></span>
+      <a href="#">生产抄表</a>
+      <span class="breadcrumb-sep"><i class="fas fa-chevron-right"></i></span>
+      <span class="current">模板数据录入</span>
+    </nav>
+
+    <!-- 查询区域 -->
+    <div class="card search-area">
+      <div class="search-row">
+        <div class="search-field keyword-field">
+          <span class="field-label">关键字：</span>
+          <input type="text" class="hc-input" placeholder="表单名称">
+        </div>
+        <div class="search-field">
+          <span class="field-label">区域位置：</span>
+          <select class="hc-select">
+            <option>请选择</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <span class="field-label">所属组织：</span>
+          <select class="hc-select">
+            <option>请选择</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <span class="field-label">类别：</span>
+          <select class="hc-select">
+            <option>请选择</option>
+          </select>
+        </div>
+        <button class="advanced-search-toggle">
+          <i class="fas fa-chevron-up"></i>
+          高级搜索
+        </button>
+        <div class="search-actions">
+          <button class="btn btn-primary"><i class="fas fa-search"></i> 搜索</button>
+          <button class="btn btn-default"><i class="fas fa-redo"></i> 重置</button>
+        </div>
+      </div>
+      <div class="search-row">
+        <div class="search-field">
+          <span class="field-label">表单周期：</span>
+          <div class="radio-group">
+            <button class="radio-item active">全部</button>
+            <button class="radio-item">天</button>
+            <button class="radio-item">周</button>
+            <button class="radio-item">月</button>
+            <button class="radio-item">季度</button>
+            <button class="radio-item">年</button>
+          </div>
+        </div>
+      </div>
+      <div class="search-row">
+        <div class="search-field">
+          <span class="field-label">业务时间：</span>
+          <div class="date-range">
+            <input type="text" class="date-input" placeholder="开始日期">
+            <span class="date-sep">-</span>
+            <input type="text" class="date-input" placeholder="结束日期">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 操作按钮行 -->
+    <div class="action-bar">
+      <button class="btn btn-default btn-add"><i class="fas fa-plus"></i> 新增</button>
+      <button class="btn btn-publish"><i class="fas fa-paper-plane"></i> 发布报表</button>
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="card">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" class="hc-checkbox"></th>
+              <th>表单名称</th>
+              <th>区域位置</th>
+              <th>所属组织</th>
+              <th>表单周期</th>
+              <th>模板类型</th>
+              <th>最近业务时间</th>
+              <th>最近录入时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>测试20260629</td>
+              <td>厂外提升泵房</td>
+              <td>设备管理中心</td>
+              <td>天</td>
+              <td>厂内</td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2026-07-13</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:30:08</span>
+                  <span class="date">2026-07-13</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>自来水厂日报_考核演示</td>
+              <td>芒果智慧自来水厂</td>
+              <td>保养组</td>
+              <td>天</td>
+              <td>厂内</td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2026-06-03</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">14:54:11</span>
+                  <span class="date">2026-06-03</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>龙江分部测试1</td>
+              <td>芒果智慧污水厂</td>
+              <td>生产调度中心</td>
+              <td>周</td>
+              <td>厂内</td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2025-08-11</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">18:05:58</span>
+                  <span class="date">2025-08-11</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link">撤销发布</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>CS</td>
+              <td>一期沉淀池</td>
+              <td>芒果水务一厂</td>
+              <td>天</td>
+              <td>厂内</td>
+              <td><span style="color:#C5C8CE;">-</span></td>
+              <td><span style="color:#C5C8CE;">-</span></td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>tt1</td>
+              <td>芒果智慧污水厂</td>
+              <td>芒果水务一厂</td>
+              <td>天</td>
+              <td>测试</td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2026-07-13</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:36:42</span>
+                  <span class="date">2026-07-13</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>0519</td>
+              <td>芒果智慧污水厂</td>
+              <td>芒果水务一厂</td>
+              <td>天</td>
+              <td>厂内</td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2026-05-28</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">11:44:36</span>
+                  <span class="date">2026-06-02</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>测试20260429</td>
+              <td>芒果智慧污水厂</td>
+              <td>芒果水务一厂</td>
+              <td>天</td>
+              <td>厂内</td>
+              <td><span style="color:#C5C8CE;">-</span></td>
+              <td><span style="color:#C5C8CE;">-</span></td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>34H验证</td>
+              <td>芒果智慧污水厂</td>
+              <td>芒果水务一厂</td>
+              <td>天</td>
+              <td>测试</td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2026-04-22</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">20:40:30</span>
+                  <span class="date">2026-05-18</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>状态型数据</td>
+              <td>芒果智慧污水厂</td>
+              <td>芒果水务一厂</td>
+              <td>天</td>
+              <td><span style="color:#C5C8CE;">-</span></td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2026-04-02</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">19:53:06</span>
+                  <span class="date">2026-04-02</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="hc-checkbox"></td>
+              <td>34G带颜色报表</td>
+              <td>芒果智慧污水厂</td>
+              <td>芒果水务一厂</td>
+              <td>天</td>
+              <td>厂内</td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">00:00:00</span>
+                  <span class="date">2026-04-29</span>
+                </div>
+              </td>
+              <td>
+                <div class="time-cell">
+                  <span class="time">19:34:50</span>
+                  <span class="date">2026-04-29</span>
+                </div>
+              </td>
+              <td>
+                <div class="action-links">
+                  <button class="action-link">记录</button>
+                  <button class="action-link">编辑</button>
+                  <button class="action-link danger">删除</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 分页器 -->
+      <div class="pagination-wrapper">
+        <span class="pagination-info">共 72 条</span>
+        <div class="pagination">
+          <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <span class="page-ellipsis">...</span>
+          <button class="page-btn">8</button>
+          <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="page-jump">
+          <span>跳至</span>
+          <input type="text" value="1">
+          <span>页</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
