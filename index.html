@@ -198,7 +198,7 @@
       "MTQxOTMsNjkuNzQ0MTg1IFoiIGlkPSLlvaLnirbnu5PlkIgiIGZpbGw9IiMxRTYyRjUiIGZpbGwtcnVsZT0ibm9uemVybyI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+"
     ].join("");
     const addedWaterBuddyColorSvg=new TextDecoder().decode(Uint8Array.from(atob(replacementWaterBuddyColorBase64),char=>char.charCodeAt(0))).replace(/^<\?xml[^\n]*\?>\r?\n?/,'').replace('<svg width="1024px" height="159px"','<svg x="64" y="442.4375" width="896" height="139.125"');
-    const addedWaterBuddyColor={id:"waterbuddy-horizontal-color",name:"WaterBuddy_白色背景蓝绿",category:"品牌标志",desc:"左右结构 / 彩色版本",svg:'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024">'+addedWaterBuddyColorSvg+'</svg>'};
+    const addedWaterBuddyColor={id:"waterbuddy-horizontal-color",name:"WaterBuddy_白色背景蓝绿",category:"品牌标志",desc:"左右结构 / 彩色版本",svg:'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024"><rect width="1024" height="1024" fill="#FFFFFF"/>'+addedWaterBuddyColorSvg+'</svg>'};
     const addedWaterBuddyColorIndex=logos.findIndex(logo=>logo.id==="waterbuddy-horizontal-white");
     if(addedWaterBuddyColorIndex>=0&&!logos.some(logo=>logo.id===addedWaterBuddyColor.id))logos.splice(addedWaterBuddyColorIndex+1,0,addedWaterBuddyColor);
     const darkWaterBuddyBase64=[
